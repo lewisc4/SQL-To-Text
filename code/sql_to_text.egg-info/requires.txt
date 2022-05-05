@@ -1,0 +1,13 @@
+torch>=1.3
+datasets>=1.8.0
+tokenizers
+wandb
+transformers
+matplotlib
+sacrebleu
+streamlit
+streamlit_ace==0.0.4
+seaborn
+scipy
+numpy
+pandas
