@@ -1,6 +1,0 @@
-setup.py
-sql_to_text.egg-info/PKG-INFO
-sql_to_text.egg-info/SOURCES.txt
-sql_to_text.egg-info/dependency_links.txt
-sql_to_text.egg-info/requires.txt
-sql_to_text.egg-info/top_level.txt
