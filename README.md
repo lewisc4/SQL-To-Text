@@ -23,7 +23,7 @@ It is necessary to have python >= 3.7 installed in order to run the code for thi
 ### Hyperparameters
 The available hyperparameters for fine-tuning the CodeT5-base model can be found in the `sql_to_text/utils.py` file. By default, a large majority of the hyperparameters are inherited from the CodeT5-base models original parameters. The default model/tokenizer is `Salesforce/codet5-base` (shouldn't be changed) and the default dataset is `wikisql` (shouldn't be changed). However, useful parameters to change/test with are:
 
-* `output_dir` <- Where to save the model to (defaults to code/cli/Outputs/)
+* `output_dir` <- Where to save the model to (defaults to `code/cli/Outputs/`)
 * `learning_rate` <- The external learning rate
 * `batch_size` <- Batch size used by the model
 * `weight_decay` <- The external weight decay
