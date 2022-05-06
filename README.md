@@ -63,4 +63,5 @@ To run the streamlit demo, the model should be stored in the `code\cli\Outputs` 
 ### CLI Commands
 **Command to run Streamlit demo:**
 * `streamlit run streamlit_demo.py`
-
+### Demo example
+![SQL-to-text demo](https://i.postimg.cc/zDPXB1qW/SQL-to-text-Demo.png)
