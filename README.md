@@ -35,7 +35,7 @@ The available hyperparameters for fine-tuning the CodeT5-base model can be found
 * `num_train_epochs` <- Number of training epochs to use
 * `train_from_scratch` <- Whether to train the model from scratch or not
 
-### CLI Commands
+### CLI Training Commands
 The below commands can be run from the `cli` directory. By default, the model is saved to the `code/cli/Outputs/` directory. If the provided `output_dir` does not exist, it will automatically be created.
 
 **To train a model that achieves 27+ BLEU scores:**
@@ -54,7 +54,7 @@ The below commands can be run from the `cli` directory. By default, the model is
 ## Performing Human Evaluation
 ### Overview
 The `code/cli/human_eval.py` file performs the human evaluations/BLEU score calculations. By default, the `code/cli/Outputs/human_eval_data.csv` file is used, because it contains the input, target, and generated sequences and the corresponding human evaluation score. Running `human_eval.py` computes the BLEU score for these examples and calculates/plots the correlations between the two scores.
-### CLI Commands
+### CLI Demo Commands
 If `human_eval_data.csv` file does not exist in the `output_dir`, the model generations will be made again on 110 test examples, and will be saved to this file. If the `human_eval_data.csv` file does exist, but has no `Results` column, nothing happens, because there is nothing to do.
 
 **Command to perform human evaluation:**
