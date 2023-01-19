@@ -1,10 +1,11 @@
-# NLP Final Project - SQL-To-Text
+# SQL-To-Text NLP Project
 
 
 ## Project Overview
 In this project a pre-trained [T5 model](https://arxiv.org/pdf/1910.10683.pdf), specifically the [CodeT5-base model](https://arxiv.org/pdf/2109.00859.pdf), is fine-tuned on the [WikiSQL dataset](https://github.com/salesforce/WikiSQL) to perform SQL-to-text translations. It is shown that this fine-tuned model achieves a higher [BLEU score](https://aclanthology.org/P02-1040.pdf) than several baseline models. This project also performs human evaluation on the fine-tuned model's predictions, to further assess its viability in performing SQL-to-text translations.
 
 ![SQL-to-text demo](https://raw.githubusercontent.com/lewisc4/SQL-To-Text/main/SQL-to-text%20Demo.gif)
+
 
 ## Setting Up The Environment
 ### Package Installation
@@ -20,6 +21,7 @@ It is necessary to have python >= 3.7 installed in order to run the code for thi
     4. Else, `pip install torch==1.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html`
     5. Check that pytorch-GPU works via `python -c "import torch; print(torch.cuda.is_available())"`. If it returns False, reinstall pytorch via one of the above command (usually this helps).
     6. If you are using 30XX, A100 or A6000 GPU, you have to use CUDA 11.3 and above. 
+
 
 ## Training A Model
 ### Hyperparameters
@@ -59,6 +61,7 @@ If `human_eval_data.csv` file does not exist in the `output_dir`, the model gene
 
 **Command to perform human evaluation:**
 * `python3 human_eval.py --output_dir=Outputs`
+
 
 ## Running A Streamlit Demo
 To run the streamlit demo, the model should be stored in the `code\cli\Outputs` directory.
