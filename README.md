@@ -3,6 +3,7 @@
 
 ## Project Overview
 In this project a pre-trained [T5 model](https://arxiv.org/pdf/1910.10683.pdf), specifically the [CodeT5-base model](https://arxiv.org/pdf/2109.00859.pdf), is fine-tuned on the [WikiSQL dataset](https://github.com/salesforce/WikiSQL) to perform SQL-to-text translations. It is shown that this fine-tuned model achieves a higher [BLEU score](https://aclanthology.org/P02-1040.pdf) than several baseline models. This project also performs human evaluation on the fine-tuned model's predictions, to further assess its viability in performing SQL-to-text translations.
+![SQL-to-text demo](https://raw.githubusercontent.com/lewisc4/SQL-To-Text/main/SQL-to-text%20Demo.gif)
 
 ## Setting Up The Environment
 ### Package Installation
@@ -65,4 +66,3 @@ To run the streamlit demo, the model should be stored in the `code\cli\Outputs` 
 * `streamlit run streamlit_demo.py`
 ### Demo example
 ![SQL-to-text demo](https://raw.githubusercontent.com/lewisc4/SQL-To-Text/main/SQL-to-text%20Demo.gif)
-![SQL-to-text demo](https://i.postimg.cc/zDPXB1qW/SQL-to-text-Demo.png)
