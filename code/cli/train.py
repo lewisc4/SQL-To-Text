@@ -32,7 +32,6 @@ logging.basicConfig(
 datasets.utils.logging.set_verbosity_warning()
 transformers.utils.logging.set_verbosity_warning()
 
-
 # To compute BLEU we will use Huggingface Datasets implementation of it
 # Sacrebleu is a flavor of BLEU that standardizes some of the BLEU parameters.
 bleu = datasets.load_metric("sacrebleu")
@@ -51,12 +50,12 @@ def preprocess_function(examples, src_max_len, tgt_max_len, tokenizer):
 	"""
 	inputs = [ex['human_readable'] for ex in examples['sql']]
 	targets = examples['question']
-
+	# Apply tokenizer to raw model inputs
 	model_inputs = tokenizer(
 		inputs, padding='longest', max_length=src_max_len, 
 		truncation=True, return_tensors='pt'
 	)
-
+	# Apply tokenizer to raw model targets
 	target_encoding = tokenizer(
 		targets, padding='longest', max_length=tgt_max_len, 
 		truncation=True
@@ -121,12 +120,16 @@ def evaluate_model(model, dataloader, tokenizer, device, max_seq_length, num_bea
 	n_generated_tokens = 0
 	model.eval()
 
+	# Iterate through each batch of eval data
 	for batch in tqdm(dataloader, desc='Evaluation'):
+		# Use inference mode so we do not update our gradients
 		with torch.inference_mode():
+			# Transfer batch data to training device
 			input_ids = batch['input_ids'].to(device)
 			attention_mask = batch['attention_mask'].to(device)
 			labels = batch['labels'].to(device)
 
+			# Get model predictions/output tokens
 			generated_tokens = model.generate(
 				input_ids,
 				attention_mask=attention_mask,
@@ -136,17 +139,19 @@ def evaluate_model(model, dataloader, tokenizer, device, max_seq_length, num_bea
 			decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
 			decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
+			# Get the number of tokens in the (decoded) model predictions
 			for pred in decoded_preds:
 				n_generated_tokens += len(tokenizer(pred)['input_ids'])
 
 			decoded_preds = [pred.strip() for pred in decoded_preds]
 			decoded_labels = [[label.strip()] for label in decoded_labels]
-
+			# Add the current batch of predictions/true labels to compute bleu score
 			bleu.add_batch(predictions=decoded_preds, references=decoded_labels)
 
+	# Convert model back to training mode
 	model.train()
+	# Calculate bleu score and log eval results
 	eval_metric = bleu.compute()
-
 	evaluation_results = {
 		'bleu': eval_metric['score'],
 		'generation_length': n_generated_tokens / len(dataloader.dataset)
@@ -169,20 +174,26 @@ def train_model(model, tokenizer, train_dataloader, eval_dataloader, optimizer, 
 	progress_bar = tqdm(range(args.max_train_steps))
 	global_step = 0
 
+	# Train for the desired number of training epochs
 	for epoch in range(args.num_train_epochs):
+		# Set the model to training mode (ensures gradients are updated)
 		model.train()
-
+		# Iterate through each batch of training data
 		for batch in train_dataloader:
+			# Transfer batch data to training device
 			input_ids = batch['input_ids'].to(args.device)
 			attention_mask = batch['attention_mask'].to(args.device)
 			labels = batch['labels'].to(args.device)
+			# Set the padding token to -100 in the training labels
 			labels[labels == tokenizer.pad_token_id] = -100
 
+			# Generate model predictions
 			model_output = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
 
 			logits = model_output.logits.to(args.device)
 			loss = model_output.loss.to(args.device)
 			
+			# Progress/update our model and schedulers/optimizers
 			loss.backward()
 			optimizer.step()
 			lr_scheduler.step()
@@ -191,6 +202,7 @@ def train_model(model, tokenizer, train_dataloader, eval_dataloader, optimizer, 
 			progress_bar.update(1)
 			global_step += 1
 
+			# Log training loss, lr, and current epoch for each batch
 			wandb.log(
 				{
 					'train_loss': loss,
@@ -200,6 +212,7 @@ def train_model(model, tokenizer, train_dataloader, eval_dataloader, optimizer, 
 				step=global_step,
 			)
 
+			# Logs training accuracy (i.e. word accuracy) every n steps
 			if global_step % args.logging_steps == 0:
 				accuracy = compute_accuracy(logits=logits, labels=labels, pad_id=tokenizer.pad_token_id)
 
@@ -208,6 +221,7 @@ def train_model(model, tokenizer, train_dataloader, eval_dataloader, optimizer, 
 					step=global_step,
 				)
 
+			# Evaluates model every n steps or at the very end of training (last step)
 			if global_step % args.eval_every_steps == 0 or global_step == args.max_train_steps:
 				eval_results, last_input_ids, last_decoded_preds, last_decoded_labels = evaluate_model(
 					model=model,
@@ -237,6 +251,7 @@ def train_model(model, tokenizer, train_dataloader, eval_dataloader, optimizer, 
 			if global_step >= args.max_train_steps:
 				break
 
+	# Return the fine-tuned model
 	return model
 
 
@@ -343,13 +358,6 @@ def main():
 		batch_size=args.batch_size
 	)
 
-	'''
-	optimizer = torch.optim.AdamW(
-			model.parameters(),
-			lr=args.learning_rate,
-			weight_decay=args.weight_decay,
-		)
-	'''
 	optimizer = Adafactor(
 		model.parameters(),
 		scale_parameter=False,
