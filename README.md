@@ -1,6 +1,6 @@
 <div id="user-content-toc">
   <ul>
-    <summary align="center">
+    <summary>
       <h1 style="display: inline-block;">
         SQL-To-Text Translations Using Deep Learning & NLP
       </h1>
@@ -8,35 +8,16 @@
   </ul>
 </div>
 
-
-<div id="user-content-toc">
-  <ul>
-    <summary>
-      <h2 style="display: inline-block;">
-        Project Overview
-      </h2>
-    </summary>
-  </ul>
-</div>
-
 ---
+
+## Project Overview
 
 In this project, a pre-trained [T5 model](https://arxiv.org/pdf/1910.10683.pdf), specifically the [CodeT5-base model](https://arxiv.org/pdf/2109.00859.pdf), was fine-tuned on the [WikiSQL dataset](https://github.com/salesforce/WikiSQL) to perform SQL-to-text translations. This fine-tuned model achieved a higher [BLEU score](https://aclanthology.org/P02-1040.pdf) than several baseline models. This project also performed human evaluation on the fine-tuned model's predictions, to further assess its viability in performing SQL-to-text translations.
 
 ![SQL-to-text demo](https://raw.githubusercontent.com/lewisc4/SQL-To-Text/main/SQL-to-text%20Demo.gif)
 
 
-<div id="user-content-toc">
-  <ul>
-    <summary>
-      <h2 style="display: inline-block;">
-        Setting Up The Environment
-      </h2>
-    </summary>
-  </ul>
-</div>
-
----
+## Environment Setup
 
 ### Package Installation
 It is necessary to have python >= 3.7 installed in order to run the code for this project. In order to install the necessary libraries and modules follow the below instructions.
@@ -56,17 +37,7 @@ Follow the steps below to ensure your GPU and all relevant libraries are up to d
 6. If you are using 30XX, A100 or A6000 GPU, you have to use CUDA 11.3 and above.
 
 
-<div id="user-content-toc">
-  <ul>
-    <summary>
-      <h2 style="display: inline-block;">
-        Training
-      </h2>
-    </summary>
-  </ul>
-</div>
-
----
+## Training
 
 The [train.py](/cli/train.py) script is used to train a model and save it to a specified directory (directory is created if it doesn't exist). If no location is specified, the model is saved to [`cli/Outputs/`](/code/cli/Outputs).
 
@@ -94,17 +65,7 @@ The available hyperparameters for fine-tuning the CodeT5-base model can be found
 `python3 train.py --output_dir=Outputs --batch_size=8 --learning_rate=3e-4 --beam_size=10 --max_train_steps=2500 --train_from_scratch`
 
 
-<div id="user-content-toc">
-  <ul>
-    <summary>
-      <h2 style="display: inline-block;">
-        Human Evaluation
-      </h2>
-    </summary>
-  </ul>
-</div>
-
----
+## Human Evaluation
 
 The [`human_eval.py`](/cli/human_eval.py) script is used to compare BLEU scores with human evaluation scores corresponding to the same model-generated sequences. By default, [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) is used as input data for human evaluations. In this file, each datapoint (i.e. row) consists of a human evaluation score and its corresponding input, target, and model-generated sequence.
 
@@ -115,17 +76,7 @@ If [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) does not exist (in 
 `python3 human_eval.py --output_dir=Outputs`
 
 
-<div id="user-content-toc">
-  <ul>
-    <summary>
-      <h2 style="display: inline-block;">
-        Streamlit Demo
-      </h2>
-    </summary>
-  </ul>
-</div>
-
----
+## Streamlit Demo
 
 [`streamlit_demo.py`](\cli\streamlit_demo.py) is the script used to initialize and drive an interactive Streamlit demo, using a saved SQL-to-text model. For this Streamlit demo to work, the desired (and preferably trained) model must be saved in [`cli/Outputs/`](/cli/Outputs). An example demo can be found under **[Project Overview](https://github.com/lewisc4/SQL-To-Text/blob/main/README.md#project-overview)**. 
 
