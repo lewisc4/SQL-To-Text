@@ -14,7 +14,7 @@ It is necessary to have python >= 3.7 installed in order to run the code for thi
 
 1. Clone or download this project to your local computer.
 2. Navigate to the [root directory](https://github.com/lewisc4/SQL-To-Text), where the [`setup.py`](/setup.py) file is located.
-3. Install the [`sql_to_text`](/sql_to_text) module and all dependencies by running the following command from the CLI: `pip install -e .` (required python modules are in [`requirements.txt`](/requirements.txt)).
+3. Install the [`sql_to_text`](/sql_to_text) module and all dependencies by running the following command: `pip install -e .` (required python modules are in [`requirements.txt`](/requirements.txt)).
 
 ### GPU-related Requirements/Installations
 Follow the steps below to ensure your GPU and all relevant libraries are up to date and in good standing.
@@ -28,8 +28,7 @@ Follow the steps below to ensure your GPU and all relevant libraries are up to d
 
 
 ## Training
-
-The [train.py](/cli/train.py) script is used to train a model and save it to a specified directory (directory is created if it doesn't exist). If no location is specified, the model is saved to [`cli/Outputs/`](/code/cli/Outputs).
+The [`train.py`](/cli/train.py) script is used to train a model and save it to a specified directory, which is created if it doesn't exist.
 
 ### Hyperparameters
 The available hyperparameters for fine-tuning the CodeT5-base model can be found in [`utils.py`](/sql_to_text/utils.py). By default, a large majority of the hyperparameters are inherited from the CodeT5-base model's original parameters. The default model/tokenizer is `Salesforce/codet5-base` and the default dataset is `wikisql` (both shouldn't be changed). However, useful parameters to change/test with are:
@@ -46,13 +45,13 @@ The available hyperparameters for fine-tuning the CodeT5-base model can be found
 
 ### Example Usage
 **To train a model that achieves a 27+ BLEU score (sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/3exrerr3)):**
-`python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=3e-4 --eval_every=10000 --beam_size=10`
+- `python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=3e-4 --eval_every=10000 --beam_size=10`
 
 **To train a model that perfectly fits 100 training examples (sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/2wdqcorw)):**
-`python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=1e-3 --debug`
+- `python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=1e-3 --debug`
 
 **To train a CodeT5-base model from scratch (sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/35f2sys4)):**
-`python3 train.py --output_dir=Outputs --batch_size=8 --learning_rate=3e-4 --beam_size=10 --max_train_steps=2500 --train_from_scratch`
+- `python3 train.py --output_dir=Outputs --batch_size=8 --learning_rate=3e-4 --beam_size=10 --max_train_steps=2500 --train_from_scratch`
 
 
 ## Human Evaluation
@@ -63,7 +62,7 @@ If [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) does not exist (in 
 
 ### Example Usage
 **To run [`human_eval.py`](/cli/human_eval.py):**
-`python3 human_eval.py --output_dir=Outputs`
+- `python3 human_eval.py --output_dir=Outputs`
 
 
 ## Streamlit Demo
@@ -72,5 +71,5 @@ If [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) does not exist (in 
 
 ### Example Usage
 **To run [`streamlit_demo.py`](/cli/streamlit_demo.py):**
-`streamlit run streamlit_demo.py`
+- `streamlit run streamlit_demo.py`
 
