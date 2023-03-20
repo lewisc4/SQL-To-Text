@@ -1,14 +1,4 @@
-<div id="user-content-toc">
-  <ul>
-    <summary>
-      <h1 style="display: inline-block;">
-        SQL-To-Text Translations Using Deep Learning & NLP
-      </h1>
-    </summary>
-  </ul>
-</div>
-
----
+# SQL-To-Text Translations Using Deep Learning & NLP
 
 ## Project Overview
 
