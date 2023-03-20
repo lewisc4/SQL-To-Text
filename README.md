@@ -67,7 +67,7 @@ If [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) does not exist (in 
 
 ## Streamlit Demo
 
-[`streamlit_demo.py`](\cli\streamlit_demo.py) is the script used to initialize and drive an interactive Streamlit demo, using a saved SQL-to-text model. For this Streamlit demo to work, the desired (and preferably trained) model must be saved in [`cli/Outputs/`](/cli/Outputs). An example demo can be found under **[Project Overview](https://github.com/lewisc4/SQL-To-Text/blob/main/README.md#project-overview)**. 
+[`streamlit_demo.py`](\cli\streamlit_demo.py) is the script used to initialize and drive an interactive Streamlit demo, using a saved SQL-to-text model. For the demo to work, the desired model to demo must be saved in [`cli/Outputs/`](/cli/Outputs). An example demo can be found under **[Project Overview](https://github.com/lewisc4/SQL-To-Text/blob/main/README.md#project-overview)**. 
 
 ### Example Usage
 **To run [`streamlit_demo.py`](/cli/streamlit_demo.py):**
