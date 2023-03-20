@@ -1,19 +1,49 @@
-# SQL-To-Text NLP Project
+<div id="user-content-toc">
+  <ul>
+    <summary align="center">
+      <h1 style="display: inline-block;">
+        SQL-To-Text Translations Using Deep Learning & NLP
+      </h1>
+    </summary>
+  </ul>
+</div>
 
 
-## Project Overview
-In this project a pre-trained [T5 model](https://arxiv.org/pdf/1910.10683.pdf), specifically the [CodeT5-base model](https://arxiv.org/pdf/2109.00859.pdf), is fine-tuned on the [WikiSQL dataset](https://github.com/salesforce/WikiSQL) to perform SQL-to-text translations. It is shown that this fine-tuned model achieves a higher [BLEU score](https://aclanthology.org/P02-1040.pdf) than several baseline models. This project also performs human evaluation on the fine-tuned model's predictions, to further assess its viability in performing SQL-to-text translations.
+<div id="user-content-toc">
+  <ul>
+    <summary>
+      <h2 style="display: inline-block;">
+        Project Overview
+      </h2>
+    </summary>
+  </ul>
+</div>
+
+---
+
+In this project, a pre-trained [T5 model](https://arxiv.org/pdf/1910.10683.pdf), specifically the [CodeT5-base model](https://arxiv.org/pdf/2109.00859.pdf), was fine-tuned on the [WikiSQL dataset](https://github.com/salesforce/WikiSQL) to perform SQL-to-text translations. This fine-tuned model achieved a higher [BLEU score](https://aclanthology.org/P02-1040.pdf) than several baseline models. This project also performed human evaluation on the fine-tuned model's predictions, to further assess its viability in performing SQL-to-text translations.
 
 ![SQL-to-text demo](https://raw.githubusercontent.com/lewisc4/SQL-To-Text/main/SQL-to-text%20Demo.gif)
 
 
-## Setting Up The Environment
+<div id="user-content-toc">
+  <ul>
+    <summary>
+      <h2 style="display: inline-block;">
+        Setting Up The Environment
+      </h2>
+    </summary>
+  </ul>
+</div>
+
+---
+
 ### Package Installation
 It is necessary to have python >= 3.7 installed in order to run the code for this project. In order to install the necessary libraries and modules follow the below instructions.
 
 1. Clone or download this project to your local computer.
-2. Navigate to the `code\` directory, where the `setup.py` file is located.
-3. Install the `sql_to_text` module and all dependencies by running the following command from the command line: `pip install -e .`
+2. Navigate to the [root directory](https://github.com/lewisc4/SQL-To-Text), where the [`setup.py`](/setup.py) file is located.
+3. Install the [`sql_to_text`](/sql_to_text) module and all dependencies by running the following command from the CLI: `pip install -e .` (required python modules are in [`requirements.txt`](/requirements.txt)).
 
 ### GPU-related Requirements/Installations
 Follow the steps below to ensure your GPU and all relevant libraries are up to date and in good standing.
@@ -25,11 +55,25 @@ Follow the steps below to ensure your GPU and all relevant libraries are up to d
 5. Check that pytorch-GPU works via `python -c "import torch; print(torch.cuda.is_available())"`. If it returns False, reinstall pytorch via one of the above command (usually this helps).
 6. If you are using 30XX, A100 or A6000 GPU, you have to use CUDA 11.3 and above.
 
-## Training A Model
-### Hyperparameters
-The available hyperparameters for fine-tuning the CodeT5-base model can be found in the `sql_to_text/utils.py` file. By default, a large majority of the hyperparameters are inherited from the CodeT5-base models original parameters. The default model/tokenizer is `Salesforce/codet5-base` (shouldn't be changed) and the default dataset is `wikisql` (shouldn't be changed). However, useful parameters to change/test with are:
 
-* `output_dir` <- Where to save the model to (defaults to `code/cli/Outputs/`)
+<div id="user-content-toc">
+  <ul>
+    <summary>
+      <h2 style="display: inline-block;">
+        Training
+      </h2>
+    </summary>
+  </ul>
+</div>
+
+---
+
+The [train.py](/cli/train.py) script is used to train a model and save it to a specified directory (directory is created if it doesn't exist). If no location is specified, the model is saved to [`cli/Outputs/`](/code/cli/Outputs).
+
+### Hyperparameters
+The available hyperparameters for fine-tuning the CodeT5-base model can be found in [`utils.py`](/sql_to_text/utils.py). By default, a large majority of the hyperparameters are inherited from the CodeT5-base model's original parameters. The default model/tokenizer is `Salesforce/codet5-base` and the default dataset is `wikisql` (both shouldn't be changed). However, useful parameters to change/test with are:
+
+* `output_dir` <- Where to save the model (created if it doesn't exist, defaults to [`cli/Outputs/`](/code/cli/Outputs))
 * `learning_rate` <- The external learning rate
 * `batch_size` <- Batch size used by the model
 * `weight_decay` <- The external weight decay
@@ -39,36 +83,53 @@ The available hyperparameters for fine-tuning the CodeT5-base model can be found
 * `num_train_epochs` <- Number of training epochs to use
 * `train_from_scratch` <- Whether to train the model from scratch or not
 
-### CLI Training Commands
-The below commands can be run from the `cli` directory. By default, the model is saved to the `code/cli/Outputs/` directory. If the provided `output_dir` does not exist, it will automatically be created.
+### Example Usage
+**To train a model that achieves a 27+ BLEU score (sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/3exrerr3)):**
+`python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=3e-4 --eval_every=10000 --beam_size=10`
 
-**To train a model that achieves 27+ BLEU scores:**
-* `python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=3e-4 --eval_every=10000 --beam_size=10`
-* Sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/3exrerr3)
+**To train a model that perfectly fits 100 training examples (sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/2wdqcorw)):**
+`python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=1e-3 --debug`
 
-**To train a model that perfectly fits 100 training examples:**
-* `python3 train.py --output_dir=Outputs --num_train_epochs=10 --batch_size=8 --learning_rate=1e-3 --debug`
-* Sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/2wdqcorw)
-
-**To train a CodeT5-base model from scratch:**
-* `python3 train.py --output_dir=Outputs --batch_size=8 --learning_rate=3e-4 --beam_size=10 --max_train_steps=2500 --train_from_scratch`
-* Sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/35f2sys4)
+**To train a CodeT5-base model from scratch (sample [WandB run](https://wandb.ai/clewis7744/sql_to_text/runs/35f2sys4)):**
+`python3 train.py --output_dir=Outputs --batch_size=8 --learning_rate=3e-4 --beam_size=10 --max_train_steps=2500 --train_from_scratch`
 
 
-## Performing Human Evaluation
-### Overview
-The `code/cli/human_eval.py` file performs the human evaluations/BLEU score calculations. By default, the `code/cli/Outputs/human_eval_data.csv` file is used, because it contains the input, target, and generated sequences and the corresponding human evaluation score. Running `human_eval.py` computes the BLEU score for these examples and calculates/plots the correlations between the two scores.
-### CLI Demo Commands
-If `human_eval_data.csv` file does not exist in the `output_dir`, the model generations will be made again on 110 test examples, and will be saved to this file. If the `human_eval_data.csv` file does exist, but has no `Results` column, nothing happens, because there is nothing to do.
+<div id="user-content-toc">
+  <ul>
+    <summary>
+      <h2 style="display: inline-block;">
+        Human Evaluation
+      </h2>
+    </summary>
+  </ul>
+</div>
 
-**Command to perform human evaluation:**
-* `python3 human_eval.py --output_dir=Outputs`
+---
+
+The [`human_eval.py`](/cli/human_eval.py) script is used to compare BLEU scores with human evaluation scores corresponding to the same model-generated sequences. By default, [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) is used as input data for human evaluations. In this file, each datapoint (i.e. row) consists of a human evaluation score and its corresponding input, target, and model-generated sequence.
+
+If [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) does not exist (in `output_dir`), model generations will be made using 110 test set examples to create it. However, it must also have a `Results` column with human evaluation scores for each example, otherwise nothing will happen.
+
+### Example Usage
+**To run [`human_eval.py`](/cli/human_eval.py):**
+`python3 human_eval.py --output_dir=Outputs`
 
 
-## Running A Streamlit Demo
-To run the streamlit demo, the model should be stored in the `code\cli\Outputs` directory.
-### CLI Commands
-**Command to run Streamlit demo:**
-* `streamlit run streamlit_demo.py`
-### Demo example
-![SQL-to-text demo](https://raw.githubusercontent.com/lewisc4/SQL-To-Text/main/SQL-to-text%20Demo.gif)
+<div id="user-content-toc">
+  <ul>
+    <summary>
+      <h2 style="display: inline-block;">
+        Streamlit Demo
+      </h2>
+    </summary>
+  </ul>
+</div>
+
+---
+
+[`streamlit_demo.py`](\cli\streamlit_demo.py) is the script used to initialize and drive an interactive Streamlit demo, using a saved SQL-to-text model. For this Streamlit demo to work, the desired (and preferably trained) model must be saved in [`cli/Outputs/`](/cli/Outputs). An example demo can be found under **[Project Overview](https://github.com/lewisc4/SQL-To-Text/blob/main/README.md#project-overview)**. 
+
+### Example Usage
+**To run [`streamlit_demo.py`](/cli/streamlit_demo.py):**
+`streamlit run streamlit_demo.py`
+
