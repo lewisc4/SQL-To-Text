@@ -33,7 +33,7 @@ The [`train.py`](/cli/train.py) script is used to train a model and save it to a
 ### Hyperparameters
 The available hyperparameters for fine-tuning the CodeT5-base model can be found in [`utils.py`](/sql_to_text/utils.py). By default, a large majority of the hyperparameters are inherited from the CodeT5-base model's original parameters. The default model/tokenizer is `Salesforce/codet5-base` and the default dataset is `wikisql` (both shouldn't be changed). However, useful parameters to change/test with are:
 
-* `output_dir` <- Where to save the model (created if it doesn't exist, defaults to [`cli/Outputs/`](/code/cli/Outputs))
+* `output_dir` <- Where to save the model (created if it doesn't exist, defaults to [`cli/Outputs/`](/cli/Outputs))
 * `learning_rate` <- The external learning rate
 * `batch_size` <- Batch size used by the model
 * `weight_decay` <- The external weight decay
@@ -67,7 +67,7 @@ If [`human_eval_data.csv`](/cli/Outputs/human_eval_data.csv) does not exist (in 
 
 ## Streamlit Demo
 
-[`streamlit_demo.py`](\cli\streamlit_demo.py) is the script used to initialize and drive an interactive Streamlit demo, using a saved SQL-to-text model. For the demo to work, the desired model to demo must be saved in [`cli/Outputs/`](/cli/Outputs). An example demo can be found under **[Project Overview](https://github.com/lewisc4/SQL-To-Text/blob/main/README.md#project-overview)**. 
+[`streamlit_demo.py`](/cli/streamlit_demo.py)is the script used to initialize and drive an interactive Streamlit demo, using a saved SQL-to-text model. For the demo to work, the desired model to demo must be saved in [`cli/Outputs/`](/cli/Outputs). An example demo can be found under **[Project Overview](https://github.com/lewisc4/SQL-To-Text/blob/main/README.md#project-overview)**. 
 
 ### Example Usage
 **To run [`streamlit_demo.py`](/cli/streamlit_demo.py):**
