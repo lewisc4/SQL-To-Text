@@ -1,4 +1,4 @@
-# SQL-To-Text Translations Using Deep Learning & NLP
+# SQL-To-Text Translation Using Deep Learning & NLP
 
 ## Project Overview
 
